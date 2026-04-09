@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Exam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Create Exam</h1>
+
+<div class="container">
+    <form method="POST">
+        <input type="text" name="name" placeholder="Exam Name" required>
+        
+        <input type="number" name="marks" placeholder="Total Marks" required>
+        
+        <button type="submit">Create Exam</button>
+    </form>
+
+    <br>
+    <a href="/dashboard"><button>Back</button></a>
+</div>
+
+</body>
+</html>

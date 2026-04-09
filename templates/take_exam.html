@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Take Exam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Available Exams</h1>
+
+<div class="container">
+
+{% if exams %}
+    {% for exam in exams %}
+        <div class="card">
+            <h3>{{ exam[1] }}</h3>
+            <p>Total Marks: {{ exam[2] }}</p>
+
+            <a href="/start_exam/{{ exam[0] }}">
+                <button>Start Exam</button>
+            </a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No exams available</p>
+{% endif %}
+
+<a href="/dashboard"><button>Back</button></a>
+
+</div>
+
+</body>
+</html>
