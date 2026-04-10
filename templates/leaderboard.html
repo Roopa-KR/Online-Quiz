@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
 </head>
 
-<body>
+<body class="leaderboard-page">
+<main class="standalone-shell">
+    <section class="login-brand">
+        <h1>Leaderboard</h1>
+        <p class="subtle">Track top performers across completed exams and benchmark progress.</p>
+    </section>
 
-<h1>Leaderboard</h1>
-<p class="subtle">Top scores across all completed exams.</p>
+    <section class="container wide standalone-card">
+        <h2>Top Scores</h2>
 
-<div class="container wide">
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Total Score</th>
+            </tr>
 
-    <table>
-        <tr>
-            <th>User</th>
-            <th>Total Score</th>
-        </tr>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
 
-        {% for row in data %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <br>
-    <a href="/dashboard"><button>Back</button></a>
-
-</div>
-
+        <a href="/dashboard" class="btn-link secondary mt-14">Back</a>
+    </section>
+</main>
 </body>
 </html>

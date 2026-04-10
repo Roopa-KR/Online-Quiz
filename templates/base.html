@@ -330,14 +330,19 @@
         // Show Edit Profile Form
         function showEditProfileForm() {
             const container = document.createElement('div');
-            container.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); z-index: 2001; min-width: 300px; box-shadow: var(--shadow);';
+            container.className = 'profile-popup';
             
             container.innerHTML = `
-                <span onclick="this.parentElement.remove()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; color: var(--muted);">&times;</span>
-                <h3 style="color: var(--primary); margin-top: 0;">Edit Profile</h3>
-                <p style="color: var(--text); margin: 20px 0;">Profile editing feature is coming soon! You'll be able to update your information and preferences.</p>
-                <button onclick="this.parentElement.remove()" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Close</button>
+                <span class="profile-popup-close">&times;</span>
+                <h3 class="profile-popup-title">Edit Profile</h3>
+                <p class="profile-popup-text">Profile editing feature is coming soon! You'll be able to update your information and preferences.</p>
+                <button type="button">Close</button>
             `;
+
+            const closeBtn = container.querySelector('.profile-popup-close');
+            const actionBtn = container.querySelector('button');
+            closeBtn.addEventListener('click', () => container.remove());
+            actionBtn.addEventListener('click', () => container.remove());
             document.body.appendChild(container);
         }
 
