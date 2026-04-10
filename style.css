@@ -49,6 +49,12 @@ body.login-page {
     display: block;
 }
 
+body.register-page,
+body.leaderboard-page {
+    padding: 28px;
+    display: block;
+}
+
 .login-shell {
     position: relative;
     z-index: 1;
@@ -59,6 +65,18 @@ body.login-page {
     grid-template-columns: minmax(300px, 1.15fr) minmax(320px, 0.85fr);
     align-items: center;
     gap: 48px;
+}
+
+.standalone-shell {
+    position: relative;
+    z-index: 1;
+    width: min(1080px, 100%);
+    min-height: calc(100vh - 56px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(340px, 0.95fr);
+    align-items: center;
+    gap: 44px;
 }
 
 .login-brand {
@@ -81,6 +99,11 @@ body.login-page {
     width: 100%;
     margin-top: 0;
     text-align: left;
+}
+
+.standalone-card {
+    width: 100%;
+    margin-top: 0;
 }
 
 .login-card h2 {
@@ -443,6 +466,18 @@ button:active {
     margin-top: 8px;
 }
 
+.mt-14 {
+    margin-top: 14px;
+}
+
+.mt-18 {
+    margin-top: 18px;
+}
+
+.mt-24 {
+    margin-top: 24px;
+}
+
 .review-item.correct {
     border-left: 4px solid #4fd1c5;
 }
@@ -505,9 +540,21 @@ hr {
         padding: 16px 12px 28px;
     }
 
+    body.register-page,
+    body.leaderboard-page {
+        padding: 16px 12px 28px;
+    }
+
     .login-shell {
         min-height: auto;
         gap: 22px;
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .standalone-shell {
+        min-height: auto;
+        gap: 20px;
         grid-template-columns: 1fr;
         align-items: start;
     }
@@ -915,6 +962,8 @@ hr {
 }
 
 .content-wrapper > .container {
+    width: min(100%, 980px);
+    margin: 0 auto;
     padding: 24px;
     border-radius: 18px;
     background: var(--card);
@@ -1492,4 +1541,41 @@ hr {
     .tests-table td {
         padding: 8px;
     }
+}
+
+.profile-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--card);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    z-index: 2001;
+    min-width: 300px;
+    box-shadow: var(--shadow);
+}
+
+.profile-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--muted);
+}
+
+.profile-popup-title {
+    color: var(--primary);
+    margin-top: 0;
+}
+
+.profile-popup-text {
+    color: var(--text);
+    margin: 20px 0;
+}
+
+.profile-popup button {
+    width: 100%;
 }
