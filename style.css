@@ -26,7 +26,7 @@ body {
     display: flex;
     flex-direction: row;
     color: var(--text);
-    font-family: "Trebuchet MS", "Verdana", sans-serif;
+    font-family: "Segoe UI", "Trebuchet MS", "Verdana", sans-serif;
     background:
         radial-gradient(circle at top left, rgba(79, 209, 197, 0.22), transparent 26%),
         radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.18), transparent 24%),
@@ -42,6 +42,74 @@ body.welcome-page {
 
 body.welcome-page .container {
     margin-top: 0;
+}
+
+body.login-page {
+    padding: 28px;
+    display: block;
+}
+
+.login-shell {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, 100%);
+    min-height: calc(100vh - 56px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(300px, 1.15fr) minmax(320px, 0.85fr);
+    align-items: center;
+    gap: 48px;
+}
+
+.login-brand {
+    max-width: 560px;
+}
+
+.login-brand h1 {
+    margin-top: 0;
+    text-align: left;
+    line-height: 1.12;
+}
+
+.login-brand .subtle {
+    margin-top: 12px;
+    font-size: 1.02rem;
+    max-width: 40ch;
+}
+
+.login-card {
+    width: 100%;
+    margin-top: 0;
+    text-align: left;
+}
+
+.login-card h2 {
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.login-form {
+    gap: 14px;
+}
+
+.btn-secondary {
+    width: 100%;
+    margin-top: 12px;
+    justify-content: center;
+    padding: 13px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(79, 209, 197, 0.45);
+    background: rgba(79, 209, 197, 0.12);
+    color: #c8f8f2;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-1px);
+    background: rgba(79, 209, 197, 0.2);
+    border-color: rgba(79, 209, 197, 0.72);
 }
 
 body.dashboard-page {
@@ -87,6 +155,7 @@ h1 {
     text-align: center;
     font-size: clamp(2rem, 3.8vw, 3.2rem);
     letter-spacing: 0.04em;
+    font-weight: 800;
 }
 
 h2,
@@ -109,6 +178,20 @@ a {
     display: inline-flex;
 }
 
+.page-intro {
+    margin-bottom: 14px;
+}
+
+.page-title {
+    margin-top: 0;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.page-subtitle {
+    margin-bottom: 0;
+}
+
 .container {
     position: relative;
     z-index: 1;
@@ -125,6 +208,10 @@ a {
 
 .container.wide {
     width: min(100%, 980px);
+}
+
+.container.narrow {
+    width: min(100%, 560px);
 }
 
 form {
@@ -180,6 +267,45 @@ button:hover {
 
 button:active {
     transform: translateY(0);
+}
+
+.btn-link {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #04111d;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+    box-shadow: 0 12px 28px rgba(56, 189, 248, 0.22);
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-link:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 16px 34px rgba(56, 189, 248, 0.3);
+}
+
+.btn-link:active {
+    transform: translateY(0);
+}
+
+.btn-link.secondary {
+    color: #c8f8f2;
+    background: rgba(79, 209, 197, 0.12);
+    border: 1px solid rgba(79, 209, 197, 0.45);
+    box-shadow: none;
+}
+
+.btn-link.secondary:hover {
+    background: rgba(79, 209, 197, 0.2);
+    border-color: rgba(79, 209, 197, 0.72);
+    filter: none;
+    box-shadow: none;
 }
 
 .card {
@@ -287,6 +413,36 @@ button:active {
     font-weight: 700;
 }
 
+.highlight-score {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 8px 0 16px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(79, 209, 197, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(79, 209, 197, 0.1);
+}
+
+.empty-state i {
+    font-size: 2.7rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: block;
+}
+
+.empty-state p {
+    margin: 0;
+}
+
+.empty-state p + p {
+    margin-top: 8px;
+}
+
 .review-item.correct {
     border-left: 4px solid #4fd1c5;
 }
@@ -343,6 +499,27 @@ hr {
 @media (max-width: 640px) {
     body {
         padding: 22px 12px 36px;
+    }
+
+    body.login-page {
+        padding: 16px 12px 28px;
+    }
+
+    .login-shell {
+        min-height: auto;
+        gap: 22px;
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .login-brand h1 {
+        text-align: center;
+    }
+
+    .login-brand .subtle {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
     }
 
     .container {
