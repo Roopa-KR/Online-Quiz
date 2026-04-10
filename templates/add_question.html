@@ -3,10 +3,12 @@
 {% block title %}Add Question{% endblock %}
 
 {% block content %}
-<h1>Add Question</h1>
-<p class="subtle">Add a question to the selected exam using a clear four-option layout.</p>
+<div class="page-intro">
+    <h1 class="page-title">Add Question</h1>
+    <p class="subtle page-subtitle">Add a question to the selected exam using a clear four-option layout.</p>
+</div>
 
-<div class="container">
+<div class="container narrow">
     <form method="POST">
         <input type="text" name="question" placeholder="Question" required>
 
@@ -20,6 +22,6 @@
         <button type="submit">Add Question</button>
     </form>
 
-    <a href="/dashboard"><button type="button">Back</button></a>
+    <a href="/dashboard" class="btn-link secondary">Back</a>
 </div>
 {% endblock %}

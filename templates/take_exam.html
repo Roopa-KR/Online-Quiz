@@ -3,8 +3,10 @@
 {% block title %}Take Exam{% endblock %}
 
 {% block content %}
-<h1>Available Exams</h1>
-<p class="subtle">Select an exam to begin. Each quiz is set to 10 marks total.</p>
+<div class="page-intro">
+    <h1 class="page-title">Available Exams</h1>
+    <p class="subtle page-subtitle">Select an exam to begin. Each quiz is set to 10 marks total.</p>
+</div>
 
 <div class="container">
 
@@ -15,16 +17,17 @@
             <p>Total Marks: {{ exam[2] }}</p>
             <p class="meta">10 questions, 1 mark each</p>
 
-            <a href="{{ url_for('take_exam', exam_id=exam[0]) }}">
-                <button>Start Exam</button>
-            </a>
+            <a class="btn-link" href="{{ url_for('take_exam', exam_id=exam[0]) }}">Start Exam</a>
         </div>
     {% endfor %}
 {% else %}
-    <p>No exams available</p>
+    <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <p>No exams available</p>
+    </div>
 {% endif %}
 
-<a href="/dashboard"><button>Back</button></a>
+<a href="/dashboard" class="btn-link secondary">Back</a>
 
 </div>
 {% endblock %}

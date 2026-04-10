@@ -3,10 +3,12 @@
 {% block title %}Create Exam{% endblock %}
 
 {% block content %}
-<h1>Create Exam</h1>
-<p class="subtle">Create a 10-mark exam, then add ten one-mark questions for it.</p>
+<div class="page-intro">
+    <h1 class="page-title">Create Exam</h1>
+    <p class="subtle page-subtitle">Create a 10-mark exam, then add ten one-mark questions for it.</p>
+</div>
 
-<div class="container">
+<div class="container narrow">
     <form method="POST">
         <input type="text" name="name" placeholder="Exam Name" required>
         
@@ -15,6 +17,6 @@
         <button type="submit">Create Exam</button>
     </form>
 
-    <a href="/dashboard"><button>Back</button></a>
+    <a href="/dashboard" class="btn-link secondary">Back</a>
 </div>
 {% endblock %}

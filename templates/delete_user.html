@@ -3,15 +3,17 @@
 {% block title %}Delete User{% endblock %}
 
 {% block content %}
-<h1>Delete User</h1>
-<p class="subtle">Remove an account permanently from the system.</p>
+<div class="page-intro">
+    <h1 class="page-title">Delete User</h1>
+    <p class="subtle page-subtitle">Remove an account permanently from the system.</p>
+</div>
 
-<div class="container">
+<div class="container narrow">
     <form method="POST">
         <input type="text" name="username" placeholder="Username" required>
         <button type="submit">Delete</button>
     </form>
 
-    <a href="/dashboard"><button type="button">Back</button></a>
+    <a href="/dashboard" class="btn-link secondary">Back</a>
 </div>
 {% endblock %}

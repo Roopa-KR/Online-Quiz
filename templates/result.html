@@ -3,20 +3,22 @@
 {% block title %}{{ exam_name }} Result{% endblock %}
 
 {% block content %}
-<h1>{{ exam_name }} Result</h1>
-<p class="subtle">Your final score is shown below.</p>
+<div class="page-intro">
+    <h1 class="page-title">{{ exam_name }} Result</h1>
+    <p class="subtle page-subtitle">Your final score is shown below.</p>
+</div>
 
-<div class="container">
+<div class="container narrow">
 
     <h2>Your Score</h2>
 
     <p class="meta">Total questions: {{ total }}</p>
 
-    <p style="font-size: 20px; color: var(--text); font-weight: 700;">
+    <p class="highlight-score">
         {{ score }} / {{ total }}
     </p>
 
-    <a href="/dashboard"><button>Go to Dashboard</button></a>
+    <a href="/dashboard" class="btn-link">Go to Dashboard</a>
 
 </div>
 {% endblock %}
