@@ -15,6 +15,15 @@ def get_exams():
     conn.close()
     return data
 
+
+def get_exam_by_id(exam_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM exams WHERE id=?", (exam_id,))
+    data = cur.fetchone()
+    conn.close()
+    return data
+
 def get_questions(exam_id):
     conn = get_connection()
     cur = conn.cursor()
@@ -40,6 +49,21 @@ def get_leaderboard():
         GROUP BY username 
         ORDER BY SUM(score) DESC
     """)
+    data = cur.fetchall()
+    conn.close()
+    return data
+
+def get_attended_tests(username):
+    """Get all tests attended by a specific user"""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT DISTINCT r.exam_id, e.name, e.total_marks, r.score
+        FROM results r
+        JOIN exams e ON r.exam_id = e.id
+        WHERE r.username = ?
+        ORDER BY r.id DESC
+    """, (username,))
     data = cur.fetchall()
     conn.close()
     return data
