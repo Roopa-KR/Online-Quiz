@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ exam_name }} Review{% endblock %}
+
+{% block content %}
+<h1>{{ exam_name }} Review</h1>
+<p class="subtle">Review incorrect answers and prepare stronger for your next exam.</p>
+
+<div class="container">
+    <h2>Your Score: {{ score }} / {{ total }}</h2>
+    <p class="quote">{{ quote }}</p>
+
+    {% for item in review_data %}
+    <div class="card review-item {% if item.is_correct %}correct{% else %}incorrect{% endif %}">
+        <div class="quiz-head">
+            <span class="question-index">Question {{ loop.index }}</span>
+            <h3>{{ item.question }}</h3>
+        </div>
+
+        <p>
+            Your Answer:
+            {% if item.user_answer %}
+                {{ item.options[item.user_answer - 1] }}
+            {% else %}
+                Not answered
+            {% endif %}
+        </p>
+
+        <p>Correct Answer: {{ item.options[item.correct_answer - 1] }}</p>
+
+        {% if item.is_correct %}
+            <p class="answer-status success">Correct</p>
+        {% else %}
+            <p class="answer-status error">Incorrect</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <a href="/dashboard"><button>Back to Dashboard</button></a>
+</div>
+{% endblock %}

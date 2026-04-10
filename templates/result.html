@@ -1,25 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Result</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}{{ exam_name }} Result{% endblock %}
 
-<h1>Result</h1>
+{% block content %}
+<h1>{{ exam_name }} Result</h1>
+<p class="subtle">Your final score is shown below.</p>
 
 <div class="container">
 
     <h2>Your Score</h2>
 
-    <p style="font-size: 20px;">
+    <p class="meta">Total questions: {{ total }}</p>
+
+    <p style="font-size: 20px; color: var(--text); font-weight: 700;">
         {{ score }} / {{ total }}
     </p>
 
     <a href="/dashboard"><button>Go to Dashboard</button></a>
 
 </div>
-
-</body>
-</html>
+{% endblock %}

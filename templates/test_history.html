@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Test History{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 10px;">Test History</h1>
+    <p class="subtle" style="text-align: center;">Review all your previously attended tests and scores</p>
+
+    <hr>
+
+    <!-- TEST HISTORY SECTION -->
+    {% if attended_tests %}
+        <h2 style="margin-top: 30px; margin-bottom: 20px;">Your Attended Tests</h2>
+        <div class="attended-tests-grid">
+            {% for test in attended_tests %}
+                <div class="attended-test-card">
+                    <div class="card-header">
+                        <h3>{{ test[1] }}</h3>
+                        {% if (test[3] / test[2] * 100) >= 50 %}
+                            <span class="badge badge-success">Passed</span>
+                        {% else %}
+                            <span class="badge badge-warning">Needs Improvement</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="score-row">
+                            <span>Score:</span>
+                            <strong>{{ test[3] }} / {{ test[2] }}</strong>
+                        </div>
+                        <div class="score-row">
+                            <span>Percentage:</span>
+                            <strong>{{ "%.1f"|format(test[3] / test[2] * 100) }}%</strong>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 60px 20px; background: rgba(79, 209, 197, 0.05); border-radius: 12px; border: 1px solid rgba(79, 209, 197, 0.1); margin-top: 30px;">
+            <i class="fas fa-inbox" style="font-size: 3rem; color: var(--muted); margin-bottom: 20px; display: block;"></i>
+            <p style="color: var(--muted); font-size: 1.1rem; margin: 0;">No tests attended yet.</p>
+            <p style="color: var(--muted); font-size: 0.95rem; margin-top: 10px;">Start an exam to see your test history here!</p>
+            <a href="{{ url_for('dashboard') }}" style="margin-top: 20px;">
+                <button style="padding: 10px 30px; background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Go to Home</button>
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

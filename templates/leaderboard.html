@@ -2,16 +2,17 @@
 <html>
 <head>
     <title>Leaderboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
 </head>
 
 <body>
 
 <h1>Leaderboard</h1>
+<p class="subtle">Top scores across all completed exams.</p>
 
-<div class="container">
+<div class="container wide">
 
-    <table border="1" width="100%">
+    <table>
         <tr>
             <th>User</th>
             <th>Total Score</th>

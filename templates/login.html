@@ -4,15 +4,14 @@
     <title>Login</title>
 
     <!-- Link CSS properly -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
 </head>
 
-<body>
+<body class="welcome-page">
 
-    <!-- Heading -->
     <h1>Examination Management System</h1>
+    <p class="subtle">Sign in to manage exams or take quizzes.</p>
 
-    <!-- Login Card -->
     <div class="container">
         <h2>Login</h2>
 
@@ -24,9 +23,6 @@
             <button type="submit">Login</button>
         </form>
 
-        <br>
-
-        <!-- Register Button -->
         <a href="/register">
             <button type="button">Register</button>
         </a>

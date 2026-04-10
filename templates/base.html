@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Exam System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <!-- SIDEBAR HEADER -->
+        <div class="sidebar-header">
+            <h3><i class="fas fa-graduation-cap"></i> ExamHub</h3>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- USER INFO -->
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <p class="user-name">{{ session.get('user', 'User') }}</p>
+                <p class="user-role">{{ session.get('role', 'Student').title() }}</p>
+            </div>
+        </div>
+
+        <!-- MAIN NAVIGATION MENU -->
+        <nav class="sidebar-menu">
+            <div class="menu-section">
+                <p class="section-title">Main</p>
+                <a href="{{ url_for('dashboard') }}" class="menu-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <p class="section-title">Exams</p>
+                <a href="{{ url_for('start_exam') }}" class="menu-item {% if request.endpoint == 'start_exam' %}active{% endif %}">
+                    <i class="fas fa-book-open"></i> <span>Start Exam</span>
+                </a>
+                <a href="{{ url_for('test_history') }}" class="menu-item {% if request.endpoint == 'test_history' %}active{% endif %}">
+                    <i class="fas fa-history"></i> <span>Test History</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <p class="section-title">Account</p>
+                <a href="#" class="menu-item" onclick="showProfile()">
+                    <i class="fas fa-user"></i> <span>Profile</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showScore()">
+                    <i class="fas fa-trophy"></i> <span>My Score</span>
+                </a>
+                <a href="#" class="menu-item" onclick="alert('Settings coming soon!')">
+                    <i class="fas fa-cog"></i> <span>Settings</span>
+                </a>
+            </div>
+
+            <!-- ADMIN ONLY SECTION -->
+            {% if session.get('role') == 'admin' %}
+            <div class="menu-section">
+                <p class="section-title">Admin</p>
+                <a href="{{ url_for('create_exam_page') }}" class="menu-item {% if request.endpoint == 'create_exam_page' %}active{% endif %}">
+                    <i class="fas fa-plus-circle"></i> <span>Create Exam</span>
+                </a>
+                <a href="{{ url_for('add_question_page') }}" class="menu-item {% if request.endpoint == 'add_question_page' %}active{% endif %}">
+                    <i class="fas fa-question-circle"></i> <span>Add Question</span>
+                </a>
+                <a href="{{ url_for('delete_user_page') }}" class="menu-item {% if request.endpoint == 'delete_user_page' %}active{% endif %}">
+                    <i class="fas fa-trash"></i> <span>Delete User</span>
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="menu-section">
+                <p class="section-title">Support</p>
+                <a href="#" class="menu-item" onclick="showHelp()">
+                    <i class="fas fa-question-circle"></i> <span>Help & Support</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i> <span>Notifications</span>
+                    <span class="badge">3</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showFeedback()">
+                    <i class="fas fa-comment"></i> <span>Feedback</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- SIDEBAR FOOTER -->
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- SIDEBAR OVERLAY (for mobile) -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="top-bar-right">
+                <button class="notification-btn" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="user-menu-btn" onclick="toggleUserMenu()">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#" onclick="alert('Settings coming soon!')"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="content-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('profileModal')">&times;</span>
+            <h2>User Profile</h2>
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-details">
+                    <p><strong>Username:</strong> {{ session.get('user', 'User') }}</p>
+                    <p><strong>Role:</strong> {{ session.get('role', 'Student').title() }}</p>
+                    <p><strong>Member Since:</strong> January 2024</p>
+                    <p><strong>Email:</strong> {{ session.get('user', 'user') }}@examhub.com</p>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="showEditProfileForm()">Edit Profile</button>
+        </div>
+    </div>
+
+    <!-- Score Modal -->
+    <div id="scoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('scoreModal')">&times;</span>
+            <h2>Your Scores</h2>
+            <div class="score-container">
+                <div class="score-card">
+                    <i class="fas fa-star"></i>
+                    <p class="score-label">Average Score</p>
+                    <p class="score-value">78%</p>
+                </div>
+                <div class="score-card">
+                    <i class="fas fa-check-circle"></i>
+                    <p class="score-label">Tests Passed</p>
+                    <p class="score-value">12</p>
+                </div>
+                <div class="score-card">
+                    <i class="fas fa-fire"></i>
+                    <p class="score-label">Current Streak</p>
+                    <p class="score-value">5 days</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('helpModal')">&times;</span>
+            <h2>Help & Support</h2>
+            <div class="help-content">
+                <h3>Frequently Asked Questions</h3>
+                <div class="faq-item">
+                    <h4>How do I take a test?</h4>
+                    <p>Go to the "Attended Tests" section and select an exam to start.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I retake a test?</h4>
+                    <p>Yes, you can take any exam multiple times to improve your score.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How are scores calculated?</h4>
+                    <p>Scores are calculated based on the number of correct answers divided by total questions.</p>
+                </div>
+                <h3>Contact Support</h3>
+                <p>Email: support@examhub.com | Phone: +1 (800) 123-4567</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="notificationsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('notificationsModal')">&times;</span>
+            <h2>Notifications</h2>
+            <div class="notifications-list">
+                <div class="notification-item">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="notification-text">
+                        <p><strong>New Exam Available</strong></p>
+                        <p>A new Advanced Python exam has been added.</p>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="notification-text">
+                        <p><strong>Test Result</strong></p>
+                        <p>You scored 85% in the General Knowledge exam.</p>
+                        <span class="notification-time">1 day ago</span>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-text">
+                        <p><strong>Reminder</strong></p>
+                        <p>Complete your pending SQL exam this week.</p>
+                        <span class="notification-time">3 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('feedbackModal')">&times;</span>
+            <h2>Send Feedback</h2>
+            <form onsubmit="submitFeedback(event)">
+                <div class="form-group">
+                    <label for="feedbackType">Feedback Type:</label>
+                    <select id="feedbackType" required>
+                        <option value="">Select Type</option>
+                        <option value="bug">Bug Report</option>
+                        <option value="feature">Feature Request</option>
+                        <option value="improvement">Improvement Suggestion</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackMessage">Your Feedback:</label>
+                    <textarea id="feedbackMessage" rows="5" placeholder="Please share your feedback..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking on overlay
+        document.querySelector('.sidebar-overlay')?.addEventListener('click', toggleSidebar);
+
+        // Toggle User Menu
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            userMenu.classList.toggle('active');
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const userMenuBtn = document.querySelector('.user-menu-btn');
+            if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+
+        // Modal Functions
+        function showProfile() {
+            document.getElementById('profileModal').style.display = 'block';
+            closeSidebarIfMobile();
+        }
+
+        function showScore() {
+            document.getElementById('scoreModal').style.display = 'block';
+            closeSidebarIfMobile();
+        }
+
+        function showHelp() {
+            document.getElementById('helpModal').style.display = 'block';
+            closeSidebarIfMobile();
+        }
+
+        function showNotifications() {
+            document.getElementById('notificationsModal').style.display = 'block';
+            closeSidebarIfMobile();
+        }
+
+        function showFeedback() {
+            document.getElementById('feedbackModal').style.display = 'block';
+            closeSidebarIfMobile();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function closeSidebarIfMobile() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+
+        // Show Edit Profile Form
+        function showEditProfileForm() {
+            const container = document.createElement('div');
+            container.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); z-index: 2001; min-width: 300px; box-shadow: var(--shadow);';
+            
+            container.innerHTML = `
+                <span onclick="this.parentElement.remove()" style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; color: var(--muted);">&times;</span>
+                <h3 style="color: var(--primary); margin-top: 0;">Edit Profile</h3>
+                <p style="color: var(--text); margin: 20px 0;">Profile editing feature is coming soon! You'll be able to update your information and preferences.</p>
+                <button onclick="this.parentElement.remove()" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Close</button>
+            `;
+            document.body.appendChild(container);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Scroll to exams section
+        function scrollToExams(event) {
+            event.preventDefault();
+            const examsSection = document.getElementById('start-exams-section');
+            if (examsSection) {
+                examsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Submit Feedback
+        function submitFeedback(event) {
+            event.preventDefault();
+            const type = document.getElementById('feedbackType').value;
+            const message = document.getElementById('feedbackMessage').value;
+            alert('Thank you for your feedback! We appreciate your input.');
+            closeModal('feedbackModal');
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+</html>

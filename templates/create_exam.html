@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Exam</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}Create Exam{% endblock %}
 
+{% block content %}
 <h1>Create Exam</h1>
+<p class="subtle">Create a 10-mark exam, then add ten one-mark questions for it.</p>
 
 <div class="container">
     <form method="POST">
@@ -18,9 +15,6 @@
         <button type="submit">Create Exam</button>
     </form>
 
-    <br>
     <a href="/dashboard"><button>Back</button></a>
 </div>
-
-</body>
-</html>
+{% endblock %}

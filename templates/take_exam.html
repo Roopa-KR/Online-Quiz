@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Take Exam</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}Take Exam{% endblock %}
 
+{% block content %}
 <h1>Available Exams</h1>
+<p class="subtle">Select an exam to begin. Each quiz is set to 10 marks total.</p>
 
 <div class="container">
 
@@ -16,8 +13,9 @@
         <div class="card">
             <h3>{{ exam[1] }}</h3>
             <p>Total Marks: {{ exam[2] }}</p>
+            <p class="meta">10 questions, 1 mark each</p>
 
-            <a href="/start_exam/{{ exam[0] }}">
+            <a href="{{ url_for('take_exam', exam_id=exam[0]) }}">
                 <button>Start Exam</button>
             </a>
         </div>
@@ -29,6 +27,4 @@
 <a href="/dashboard"><button>Back</button></a>
 
 </div>
-
-</body>
-</html>
+{% endblock %}

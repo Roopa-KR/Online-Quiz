@@ -2,12 +2,13 @@
 <html>
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
 </head>
 
 <body>
 
 <h1>Register</h1>
+<p class="subtle">Create an admin or student account to access the system.</p>
 
 <div class="container">
 
@@ -24,7 +25,6 @@
     <button type="submit">Register</button>
 </form>
 
-<br>
 <a href="/"><button>Back to Login</button></a>
 
 </div>

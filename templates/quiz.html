@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Quiz</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}{{ exam_name }}{% endblock %}
 
-<h1>Exam</h1>
+{% block content %}
+<h1>{{ exam_name }}</h1>
+<p class="subtle">Answer every question carefully. Each correct answer is worth 1 mark.</p>
 
 <div class="container">
 
@@ -15,12 +12,29 @@
 
 {% for q in questions %}
     <div class="card">
-        <p><b>{{ q[2] }}</b></p>
+        <div class="quiz-head">
+            <span class="question-index">Question {{ loop.index }}</span>
+            <h3>{{ q[2] }}</h3>
+        </div>
 
-        <input type="radio" name="{{ q[0] }}" value="1"> {{ q[3] }}<br>
-        <input type="radio" name="{{ q[0] }}" value="2"> {{ q[4] }}<br>
-        <input type="radio" name="{{ q[0] }}" value="3"> {{ q[5] }}<br>
-        <input type="radio" name="{{ q[0] }}" value="4"> {{ q[6] }}<br>
+        <div class="option-list">
+            <label class="option">
+                <input type="radio" name="{{ q[0] }}" value="1" required>
+                <span>{{ q[3] }}</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="{{ q[0] }}" value="2">
+                <span>{{ q[4] }}</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="{{ q[0] }}" value="3">
+                <span>{{ q[5] }}</span>
+            </label>
+            <label class="option">
+                <input type="radio" name="{{ q[0] }}" value="4">
+                <span>{{ q[6] }}</span>
+            </label>
+        </div>
     </div>
 {% endfor %}
 
@@ -29,6 +43,4 @@
 </form>
 
 </div>
-
-</body>
-</html>
+{% endblock %}

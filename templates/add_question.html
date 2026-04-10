@@ -1,16 +1,25 @@
-<h2>Add Question</h2>
+{% extends "base.html" %}
 
-<form method="POST">
-    Question: <input type="text" name="question"><br><br>
+{% block title %}Add Question{% endblock %}
 
-    Option 1: <input type="text" name="option1"><br>
-    Option 2: <input type="text" name="option2"><br>
-    Option 3: <input type="text" name="option3"><br>
-    Option 4: <input type="text" name="option4"><br><br>
+{% block content %}
+<h1>Add Question</h1>
+<p class="subtle">Add a question to the selected exam using a clear four-option layout.</p>
 
-    Correct Option (1-4): <input type="number" name="correct"><br><br>
+<div class="container">
+    <form method="POST">
+        <input type="text" name="question" placeholder="Question" required>
 
-    <button type="submit">Add Question</button>
-</form>
+        <input type="text" name="option1" placeholder="Option 1" required>
+        <input type="text" name="option2" placeholder="Option 2" required>
+        <input type="text" name="option3" placeholder="Option 3" required>
+        <input type="text" name="option4" placeholder="Option 4" required>
 
-<a href="/dashboard">Back</a>
+        <input type="number" name="correct" min="1" max="4" placeholder="Correct Option (1-4)" required>
+
+        <button type="submit">Add Question</button>
+    </form>
+
+    <a href="/dashboard"><button type="button">Back</button></a>
+</div>
+{% endblock %}
