@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
-    <!-- Link CSS properly -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
 </head>
 
-<body class="welcome-page">
+<body class="login-page">
+    <main class="login-shell">
+        <section class="login-brand">
+            <h1>Examination Management System</h1>
+            <p class="subtle">Sign in to manage exams, create tests, and take quizzes from a single dashboard.</p>
+        </section>
 
-    <h1>Examination Management System</h1>
-    <p class="subtle">Sign in to manage exams or take quizzes.</p>
+        <section class="container login-card" aria-label="Login form">
+            <h2>Login</h2>
 
-    <div class="container">
-        <h2>Login</h2>
+            <form method="POST" class="login-form">
+                <input type="text" name="username" placeholder="Enter Username" autocomplete="username" required>
+                <input type="password" name="password" placeholder="Enter Password" autocomplete="current-password" required>
+                <button type="submit">Login</button>
+            </form>
 
-        <form method="POST">
-            <input type="text" name="username" placeholder="Enter Username" required>
-            
-            <input type="password" name="password" placeholder="Enter Password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-
-        <a href="/register">
-            <button type="button">Register</button>
-        </a>
-
-    </div>
-
+            <a href="/register" class="btn-secondary">Register</a>
+        </section>
+    </main>
 </body>
 </html>
