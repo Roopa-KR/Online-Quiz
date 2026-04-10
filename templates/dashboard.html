@@ -1,20 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
 <div class="container">
     <h2>Welcome {{ session.get('user') }}</h2>
-    <h3>Role: {{ role }}</h3>
+    <p class="meta">Role: {{ role }}</p>
 
     <hr>
 
     <!-- ADMIN FEATURES -->
     {% if role == 'admin' %}
-        <div>
+        <div class="action-grid">
             <a href="{{ url_for('create_exam_page') }}">
                 <button>Create Exam</button>
             </a>
@@ -32,21 +29,44 @@
     {% endif %}
 
     <!-- COMMON FEATURES -->
-    <div>
-        <a href="{{ url_for('start_exam') }}">
+    <div class="button-row">
+        <a href="#start-exams-section" onclick="scrollToExams(event)">
             <button>Start Exam</button>
         </a>
     </div>
 
     <br>
 
-    <!-- LOGOUT -->
-    <div>
-        <a href="{{ url_for('logout') }}">
-            <button>Logout</button>
-        </a>
+    <!-- START EXAMS SECTION -->
+    <div id="start-exams-section">
+        <h3><i class="fas fa-book"></i> Available Subjects</h3>
+        {% if exams %}
+            <div class="exams-grid">
+                {% for exam in exams %}
+                    <div class="exam-card">
+                        <div class="exam-card-header">
+                            <h4>{{ exam[1] }}</h4>
+                        </div>
+                        <div class="exam-card-body">
+                            <p class="exam-info">
+                                <i class="fas fa-star"></i> Total Marks: <strong>{{ exam[2] }}</strong>
+                            </p>
+                            <p class="exam-info">
+                                <i class="fas fa-list"></i> Questions: <strong>10</strong>
+                            </p>
+                            <a href="{{ url_for('take_exam', exam_id=exam[0]) }}">
+                                <button class="exam-start-btn">Start Exam</button>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px 20px; background: rgba(79, 209, 197, 0.05); border-radius: 12px; border: 1px solid rgba(79, 209, 197, 0.1);">
+                <i class="fas fa-inbox" style="font-size: 2.5rem; color: var(--muted); margin-bottom: 15px; display: block;"></i>
+                <p style="color: var(--muted); font-size: 1rem; margin: 0;">No exams available at the moment.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
