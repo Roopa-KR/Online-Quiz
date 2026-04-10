@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
     password TEXT,
-    role TEXT
+    role TEXT,
+    last_login_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS exams (
@@ -35,6 +36,12 @@ CREATE TABLE IF NOT EXISTS results (
     score INTEGER
 );
 """)
+
+# Ensure older databases also get the login timestamp column.
+cursor.execute("PRAGMA table_info(users)")
+existing_columns = [row[1] for row in cursor.fetchall()]
+if "last_login_at" not in existing_columns:
+    cursor.execute("ALTER TABLE users ADD COLUMN last_login_at TEXT")
 
 conn.commit()
 conn.close()
