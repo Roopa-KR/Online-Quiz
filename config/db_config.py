@@ -1,4 +1,6 @@
+import os
 import sqlite3
 
 def get_connection():
-    return sqlite3.connect("exam.db")
+    db_path = os.getenv("DB_PATH", "exam.db")
+    return sqlite3.connect(db_path)

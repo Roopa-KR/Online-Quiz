@@ -137,7 +137,7 @@
     <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('profileModal')">&times;</span>
+            <span class="close" data-close-modal>&times;</span>
             <h2>User Profile</h2>
             <div class="profile-info">
                 <div class="profile-avatar">
@@ -146,18 +146,17 @@
                 <div class="profile-details">
                     <p><strong>Username:</strong> {{ session.get('user', 'User') }}</p>
                     <p><strong>Role:</strong> {{ session.get('role', 'Student').title() }}</p>
-                    <p><strong>Member Since:</strong> January 2024</p>
+                    <p><strong>Member Since:</strong> {{ session.get('member_since', 'Not available') }}</p>
                     <p><strong>Email:</strong> {{ session.get('user', 'user') }}@examhub.com</p>
                 </div>
             </div>
-            <button class="btn-primary" onclick="showEditProfileForm()">Edit Profile</button>
         </div>
     </div>
 
     <!-- Score Modal -->
     <div id="scoreModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('scoreModal')">&times;</span>
+            <span class="close" data-close-modal>&times;</span>
             <h2>Your Scores</h2>
             <div class="score-container">
                 <div class="score-card">
@@ -182,7 +181,7 @@
     <!-- Help Modal -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('helpModal')">&times;</span>
+            <span class="close" data-close-modal>&times;</span>
             <h2>Help & Support</h2>
             <div class="help-content">
                 <h3>Frequently Asked Questions</h3>
@@ -207,7 +206,7 @@
     <!-- Notifications Modal -->
     <div id="notificationsModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('notificationsModal')">&times;</span>
+            <span class="close" data-close-modal>&times;</span>
             <h2>Notifications</h2>
             <div class="notifications-list">
                 <div class="notification-item">
@@ -241,7 +240,7 @@
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('feedbackModal')">&times;</span>
+            <span class="close" data-close-modal>&times;</span>
             <h2>Send Feedback</h2>
             <form onsubmit="submitFeedback(event)">
                 <div class="form-group">
@@ -326,25 +325,17 @@
             }
         }
 
-
-        // Show Edit Profile Form
-        function showEditProfileForm() {
-            const container = document.createElement('div');
-            container.className = 'profile-popup';
-            
-            container.innerHTML = `
-                <span class="profile-popup-close">&times;</span>
-                <h3 class="profile-popup-title">Edit Profile</h3>
-                <p class="profile-popup-text">Profile editing feature is coming soon! You'll be able to update your information and preferences.</p>
-                <button type="button">Close</button>
-            `;
-
-            const closeBtn = container.querySelector('.profile-popup-close');
-            const actionBtn = container.querySelector('button');
-            closeBtn.addEventListener('click', () => container.remove());
-            actionBtn.addEventListener('click', () => container.remove());
-            document.body.appendChild(container);
-        }
+        // Make close icons functional for all modals.
+        document.querySelectorAll('[data-close-modal]').forEach(function (closeIcon) {
+            closeIcon.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                const modal = closeIcon.closest('.modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
 
         // Close modals when clicking outside
         window.onclick = function(event) {
