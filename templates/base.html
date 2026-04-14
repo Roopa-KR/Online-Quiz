@@ -76,15 +76,9 @@
 
             <div class="menu-section">
                 <p class="section-title">Support</p>
-                <a href="#" class="menu-item" onclick="showHelp()">
-                    <i class="fas fa-question-circle"></i> <span>Help & Support</span>
-                </a>
                 <a href="#" class="menu-item" onclick="showNotifications()">
                     <i class="fas fa-bell"></i> <span>Notifications</span>
                     <span class="badge">3</span>
-                </a>
-                <a href="#" class="menu-item" onclick="showFeedback()">
-                    <i class="fas fa-comment"></i> <span>Feedback</span>
                 </a>
             </div>
         </nav>
@@ -107,20 +101,6 @@
             <button class="menu-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
-            <div class="top-bar-right">
-                <button class="notification-btn" onclick="showNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
-                <button class="user-menu-btn" onclick="toggleUserMenu()">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <div class="user-menu" id="userMenu">
-                    <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profile</a>
-                    <hr>
-                    <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
         </div>
 
         <!-- PAGE CONTENT -->
@@ -133,7 +113,6 @@
     <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
-            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>User Profile</h2>
             <div class="profile-info">
                 <div class="profile-avatar">
@@ -152,49 +131,41 @@
     <!-- Score Modal -->
     <div id="scoreModal" class="modal">
         <div class="modal-content">
-            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Your Scores</h2>
             <div class="score-container">
                 <div class="score-card">
                     <i class="fas fa-star"></i>
                     <p class="score-label">Average Score</p>
-                    <p class="score-value">78%</p>
+                    <p class="score-value">
+                        {% if score_summary.has_data and score_summary.average_score is not none %}
+                            {{ score_summary.average_score }}%
+                        {% else %}
+                            No data available
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="score-card">
                     <i class="fas fa-check-circle"></i>
                     <p class="score-label">Tests Passed</p>
-                    <p class="score-value">12</p>
+                    <p class="score-value">
+                        {% if score_summary.has_data %}
+                            {{ score_summary.tests_passed }}
+                        {% else %}
+                            No data available
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="score-card">
                     <i class="fas fa-fire"></i>
                     <p class="score-label">Current Streak</p>
-                    <p class="score-value">5 days</p>
+                    <p class="score-value">
+                        {% if score_summary.has_data %}
+                            {{ score_summary.current_streak }} day{% if score_summary.current_streak != 1 %}s{% endif %}
+                        {% else %}
+                            No data available
+                        {% endif %}
+                    </p>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Help Modal -->
-    <div id="helpModal" class="modal">
-        <div class="modal-content">
-            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
-            <h2>Help & Support</h2>
-            <div class="help-content">
-                <h3>Frequently Asked Questions</h3>
-                <div class="faq-item">
-                    <h4>How do I take a test?</h4>
-                    <p>Go to the "Attended Tests" section and select an exam to start.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Can I retake a test?</h4>
-                    <p>Yes, you can take any exam multiple times to improve your score.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>How are scores calculated?</h4>
-                    <p>Scores are calculated based on the number of correct answers divided by total questions.</p>
-                </div>
-                <h3>Contact Support</h3>
-                <p>Email: support@examhub.com | Phone: +1 (800) 123-4567</p>
             </div>
         </div>
     </div>
@@ -202,7 +173,6 @@
     <!-- Notifications Modal -->
     <div id="notificationsModal" class="modal">
         <div class="modal-content">
-            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Notifications</h2>
             <div class="notifications-list">
                 <div class="notification-item">
@@ -233,31 +203,6 @@
         </div>
     </div>
 
-    <!-- Feedback Modal -->
-    <div id="feedbackModal" class="modal">
-        <div class="modal-content">
-            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
-            <h2>Send Feedback</h2>
-            <form onsubmit="submitFeedback(event)">
-                <div class="form-group">
-                    <label for="feedbackType">Feedback Type:</label>
-                    <select id="feedbackType" required>
-                        <option value="">Select Type</option>
-                        <option value="bug">Bug Report</option>
-                        <option value="feature">Feature Request</option>
-                        <option value="improvement">Improvement Suggestion</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackMessage">Your Feedback:</label>
-                    <textarea id="feedbackMessage" rows="5" placeholder="Please share your feedback..." required></textarea>
-                </div>
-                <button type="submit" class="btn-primary">Submit Feedback</button>
-            </form>
-        </div>
-    </div>
-
     <script>
         // Toggle Sidebar
         function toggleSidebar() {
@@ -269,21 +214,6 @@
 
         // Close sidebar when clicking on overlay
         document.querySelector('.sidebar-overlay')?.addEventListener('click', toggleSidebar);
-
-        // Toggle User Menu
-        function toggleUserMenu() {
-            const userMenu = document.getElementById('userMenu');
-            userMenu.classList.toggle('active');
-        }
-
-        // Close user menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const userMenu = document.getElementById('userMenu');
-            const userMenuBtn = document.querySelector('.user-menu-btn');
-            if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
-                userMenu.classList.remove('active');
-            }
-        });
 
         // Modal Functions
         function getVisibleModals() {
@@ -328,23 +258,9 @@
             closeSidebarIfMobile();
         }
 
-        function showHelp() {
-            openModalById('helpModal');
-            closeSidebarIfMobile();
-        }
-
         function showNotifications() {
             openModalById('notificationsModal');
             closeSidebarIfMobile();
-        }
-
-        function showFeedback() {
-            openModalById('feedbackModal');
-            closeSidebarIfMobile();
-        }
-
-        function closeModal(modalId) {
-            closeModalElement(document.getElementById(modalId));
         }
 
         function closeSidebarIfMobile() {
@@ -353,16 +269,8 @@
             }
         }
 
-        // Global delegated modal close behavior for current and future modals.
+        // Global modal close behavior for overlay clicks and future modal containers.
         document.addEventListener('click', function(event) {
-            const closeTrigger = event.target.closest('.close-btn, .modal-close, [data-close-modal], .close');
-            if (closeTrigger) {
-                event.preventDefault();
-                const modalToClose = closeTrigger.closest('.modal, .popup, .modal-overlay, .popup-overlay');
-                closeModalElement(modalToClose);
-                return;
-            }
-
             // Close when clicking on modal overlay/background (outside content).
             if (event.target.matches('.modal, .popup, .modal-overlay, .popup-overlay')) {
                 closeModalElement(event.target);
@@ -389,15 +297,6 @@
             }
         }
 
-        // Submit Feedback
-        function submitFeedback(event) {
-            event.preventDefault();
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
-            alert('Thank you for your feedback! We appreciate your input.');
-            closeModal('feedbackModal');
-            document.querySelector('#feedbackModal form')?.reset();
-        }
     </script>
 </body>
 </html>

@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS results (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT,
     exam_id INTEGER,
-    score INTEGER
+    score INTEGER,
+    completed_at TEXT
 );
 """)
 
@@ -42,6 +43,12 @@ cursor.execute("PRAGMA table_info(users)")
 existing_columns = [row[1] for row in cursor.fetchall()]
 if "last_login_at" not in existing_columns:
     cursor.execute("ALTER TABLE users ADD COLUMN last_login_at TEXT")
+
+# Ensure older databases also get the result completion timestamp column.
+cursor.execute("PRAGMA table_info(results)")
+existing_result_columns = [row[1] for row in cursor.fetchall()]
+if "completed_at" not in existing_result_columns:
+    cursor.execute("ALTER TABLE results ADD COLUMN completed_at TEXT")
 
 conn.commit()
 conn.close()

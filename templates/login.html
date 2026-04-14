@@ -17,8 +17,12 @@
         <section class="container login-card" aria-label="Login form">
             <h2>Login</h2>
 
+            {% if error_message %}
+            <div class="form-error" role="alert">{{ error_message }}</div>
+            {% endif %}
+
             <form method="POST" class="login-form">
-                <input type="text" name="username" placeholder="Enter Username" autocomplete="username" required>
+                <input type="text" name="username" placeholder="Enter Username" autocomplete="username" required value="{{ username or '' }}">
                 <input type="password" name="password" placeholder="Enter Password" autocomplete="current-password" required>
                 <button type="submit">Login</button>
             </form>

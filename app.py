@@ -4,7 +4,15 @@ from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, session
 from services.auth_service import login, register, delete_user
-from services.exam_service import create_exam, get_exams, get_exam_by_id, get_questions, save_result, get_attended_tests
+from services.exam_service import (
+    create_exam,
+    get_attended_tests,
+    get_exam_by_id,
+    get_exams,
+    get_questions,
+    get_user_score_summary,
+    save_result,
+)
 
 load_dotenv()
 
@@ -37,11 +45,27 @@ def get_motivational_quote(score, total):
     return "Do your best in the next exam. Every attempt makes you stronger."
 
 
+@app.context_processor
+def inject_score_summary():
+    username = session.get("user")
+    if not username:
+        return {
+            "score_summary": {
+                "has_data": False,
+                "average_score": None,
+                "tests_passed": 0,
+                "current_streak": 0,
+            }
+        }
+
+    return {"score_summary": get_user_score_summary(username)}
+
+
 # 🔐 LOGIN
 @app.route("/", methods=["GET", "POST"])
 def login_page():
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username", "")
         password = request.form["password"]
 
         user = login(username, password)
@@ -51,10 +75,14 @@ def login_page():
             session["role"] = user[3]
             session["member_since"] = format_member_since(user[4])
             return redirect(url_for("dashboard"))
-        else:
-            return "Login Failed"
 
-    return render_template("login.html")
+        return render_template(
+            "login.html",
+            error_message="Wrong password, please try again",
+            username=username,
+        )
+
+    return render_template("login.html", username="")
 
 
 # 📝 REGISTER
