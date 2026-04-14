@@ -56,9 +56,6 @@
                 <a href="#" class="menu-item" onclick="showScore()">
                     <i class="fas fa-trophy"></i> <span>My Score</span>
                 </a>
-                <a href="#" class="menu-item" onclick="alert('Settings coming soon!')">
-                    <i class="fas fa-cog"></i> <span>Settings</span>
-                </a>
             </div>
 
             <!-- ADMIN ONLY SECTION -->
@@ -120,7 +117,6 @@
                 </button>
                 <div class="user-menu" id="userMenu">
                     <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profile</a>
-                    <a href="#" onclick="alert('Settings coming soon!')"><i class="fas fa-cog"></i> Settings</a>
                     <hr>
                     <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
@@ -137,7 +133,7 @@
     <!-- Profile Modal -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close-modal>&times;</span>
+            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>User Profile</h2>
             <div class="profile-info">
                 <div class="profile-avatar">
@@ -156,7 +152,7 @@
     <!-- Score Modal -->
     <div id="scoreModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close-modal>&times;</span>
+            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Your Scores</h2>
             <div class="score-container">
                 <div class="score-card">
@@ -181,7 +177,7 @@
     <!-- Help Modal -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close-modal>&times;</span>
+            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Help & Support</h2>
             <div class="help-content">
                 <h3>Frequently Asked Questions</h3>
@@ -206,7 +202,7 @@
     <!-- Notifications Modal -->
     <div id="notificationsModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close-modal>&times;</span>
+            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Notifications</h2>
             <div class="notifications-list">
                 <div class="notification-item">
@@ -240,7 +236,7 @@
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close-modal>&times;</span>
+            <button type="button" class="close-btn modal-close" aria-label="Close modal" data-close-modal>&times;</button>
             <h2>Send Feedback</h2>
             <form onsubmit="submitFeedback(event)">
                 <div class="form-group">
@@ -290,33 +286,65 @@
         });
 
         // Modal Functions
+        function getVisibleModals() {
+            return Array.from(document.querySelectorAll('.modal')).filter(function (modal) {
+                return modal.style.display !== 'none' && window.getComputedStyle(modal).display !== 'none';
+            });
+        }
+
+        function syncBodyScrollLock() {
+            const hasOpenModal = getVisibleModals().length > 0;
+            document.body.classList.toggle('modal-open', hasOpenModal);
+        }
+
+        function openModalById(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) {
+                return;
+            }
+
+            modal.style.display = 'block';
+            modal.classList.add('active', 'show');
+            syncBodyScrollLock();
+        }
+
+        function closeModalElement(modalElement) {
+            if (!modalElement) {
+                return;
+            }
+
+            modalElement.style.display = 'none';
+            modalElement.classList.remove('active', 'show');
+            syncBodyScrollLock();
+        }
+
         function showProfile() {
-            document.getElementById('profileModal').style.display = 'block';
+            openModalById('profileModal');
             closeSidebarIfMobile();
         }
 
         function showScore() {
-            document.getElementById('scoreModal').style.display = 'block';
+            openModalById('scoreModal');
             closeSidebarIfMobile();
         }
 
         function showHelp() {
-            document.getElementById('helpModal').style.display = 'block';
+            openModalById('helpModal');
             closeSidebarIfMobile();
         }
 
         function showNotifications() {
-            document.getElementById('notificationsModal').style.display = 'block';
+            openModalById('notificationsModal');
             closeSidebarIfMobile();
         }
 
         function showFeedback() {
-            document.getElementById('feedbackModal').style.display = 'block';
+            openModalById('feedbackModal');
             closeSidebarIfMobile();
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            closeModalElement(document.getElementById(modalId));
         }
 
         function closeSidebarIfMobile() {
@@ -325,24 +353,32 @@
             }
         }
 
-        // Make close icons functional for all modals.
-        document.querySelectorAll('[data-close-modal]').forEach(function (closeIcon) {
-            closeIcon.addEventListener('click', function (event) {
+        // Global delegated modal close behavior for current and future modals.
+        document.addEventListener('click', function(event) {
+            const closeTrigger = event.target.closest('.close-btn, .modal-close, [data-close-modal], .close');
+            if (closeTrigger) {
                 event.preventDefault();
-                event.stopPropagation();
-                const modal = closeIcon.closest('.modal');
-                if (modal) {
-                    modal.style.display = 'none';
-                }
-            });
+                const modalToClose = closeTrigger.closest('.modal, .popup, .modal-overlay, .popup-overlay');
+                closeModalElement(modalToClose);
+                return;
+            }
+
+            // Close when clicking on modal overlay/background (outside content).
+            if (event.target.matches('.modal, .popup, .modal-overlay, .popup-overlay')) {
+                closeModalElement(event.target);
+            }
         });
 
-        // Close modals when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+        // Close the top-most open modal on ESC.
+        document.addEventListener('keydown', function(event) {
+            if (event.key !== 'Escape') {
+                return;
             }
-        }
+
+            const openModals = getVisibleModals();
+            const topModal = openModals[openModals.length - 1];
+            closeModalElement(topModal);
+        });
 
         // Scroll to exams section
         function scrollToExams(event) {
@@ -360,7 +396,7 @@
             const message = document.getElementById('feedbackMessage').value;
             alert('Thank you for your feedback! We appreciate your input.');
             closeModal('feedbackModal');
-            document.querySelector('form').reset();
+            document.querySelector('#feedbackModal form')?.reset();
         }
     </script>
 </body>

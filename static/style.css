@@ -34,6 +34,10 @@ body {
     overflow-x: hidden;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 body.welcome-page {
     justify-content: center;
     padding-top: 0;
@@ -990,6 +994,7 @@ hr {
 }
 
 .modal-content {
+    position: relative;
     background: var(--card);
     margin: 5% auto;
     padding: 28px;
@@ -1020,18 +1025,31 @@ hr {
     font-size: 1.4rem;
 }
 
-.close {
+.close,
+.close-btn,
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     color: var(--muted);
-    float: right;
     font-size: 2rem;
     font-weight: 300;
     cursor: pointer;
     transition: all 0.3s ease;
     line-height: 1;
+    width: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 .close:hover,
-.close:focus {
+.close:focus,
+.close-btn:hover,
+.close-btn:focus,
+.modal-close:hover,
+.modal-close:focus {
     color: var(--primary);
 }
 
